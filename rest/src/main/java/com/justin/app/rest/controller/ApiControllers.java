@@ -3,10 +3,7 @@ package com.justin.app.rest.controller;
 import com.justin.app.rest.models.Issue;
 import com.justin.app.rest.repo.IssueRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +27,22 @@ public class ApiControllers {
     public String  saveIssue(@RequestBody Issue issue) {
         issueRepo.save(issue);
         return "saved... ";
+    }
+
+    @PutMapping(value = "update/{id}")
+    public String updateIssue(@PathVariable long id, @RequestBody Issue issue) {
+        Issue updatedIssue = issueRepo.findById(id).get();
+        updatedIssue.setDescription(issue.getDescription());
+        updatedIssue.setTitle(issue.getTitle());
+        issueRepo.save(updatedIssue);
+        return "updated";
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public String deleteIssue(@PathVariable long id) {
+        Issue deleteIssue = issueRepo.findById(id).get();
+        issueRepo.delete(deleteIssue);
+        return "deleted";
     }
 
 }
